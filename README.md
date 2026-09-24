@@ -18,7 +18,7 @@ Python integrates the peaks.
 
 | Item | Notes |
 |---|---|
-| Raspberry Pi 4 (2 GB is plenty) | Pi OS Bookworm 64-bit, SPI enabled |
+| Raspberry Pi 4 or 5 | Fedora (primary; see `deploy/README.md`) or Raspberry Pi OS 64-bit. The Pi 5 with NVMe is the better instrument box; the DAQ load itself is tiny |
 | Waveshare High-Precision AD HAT (ADS1263) | 5 differential channels, 32-bit, open schematic |
 | PC817 optocoupler + 1 kΩ + 10 kΩ | isolates the e2695 Inject Start closure from the Pi GPIO |
 | Shielded twisted pair, 22–24 AWG | one pair per analog channel |
@@ -37,9 +37,12 @@ uv run pytest
 
 ## On the Pi
 
+Fedora: run `deploy/fedora-setup.sh` once with sudo and reboot (it enables SPI, sets device
+permissions, installs the build deps and the systemd unit). Raspberry Pi OS: `sudo raspi-config
+nonint do_spi 0`. Then:
+
 ```bash
-sudo raspi-config nonint do_spi 0          # enable SPI
-uv pip install -e '.[pi]'
+pip install -e '.[pi]'
 alliance-daq live --rate 2                 # check every channel reads what the front panel shows
 alliance-daq record --duration 900 --label std-mix --count 0   # arm; each Inject Start pulse starts a 15 min run
 ```

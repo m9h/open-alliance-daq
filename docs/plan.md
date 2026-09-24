@@ -83,10 +83,27 @@ plain so any future tool can import it.
 
 ## Compute
 
-A Raspberry Pi 4 is sufficient. The load is 20 SPI transactions per second and a CSV
-append; the Waveshare driver targets the Pi 4's RPi.GPIO stack directly. A Pi 5 also works
-but needs `rpi-lgpio` in place of `RPi.GPIO`. A Pi Zero 2 W would run it too, though the
-extra USB ports on a Pi 4 are useful for a keyboard during setup.
+A Raspberry Pi 4 is sufficient for acquisition: the load is 20 SPI transactions per second
+and a CSV append. A Pi 5 with NVMe storage is the better instrument box for the analysis and
+reporting that run on the same machine, and for storage reliability.
+
+**OS: Fedora.** Fedora is the lab's standard and the project targets it first. What differs
+from Raspberry Pi OS, and how it is handled:
+
+* `RPi.GPIO` does not work on Fedora (no `/dev/gpiomem`) and does not work on any Pi 5. The
+  GPIO layer in `alliance_daq/gpio.py` uses libgpiod, so the same code runs on Fedora, on
+  Raspberry Pi OS, and on Pi 4 or Pi 5. The chip is `/dev/gpiochip0` on Pi 4; on Pi 5 set
+  `ALLIANCE_DAQ_GPIOCHIP` to whichever chip `gpiodetect` labels `pinctrl-rp1`.
+* SPI is enabled through the Pi firmware's `config.txt` in `/boot/efi` (`dtparam=spi=on`),
+  which Fedora's `bcm283x-firmware` package supports the same way Raspberry Pi OS does.
+  `deploy/fedora-setup.sh` does this, plus udev rules for `/dev/spidev*` and `/dev/gpiochip*`.
+* Pi 5 on Fedora needs the Fedora ARM maintainer's kernel from the `pbrobinson/a64-kernel`
+  COPR rather than the stock kernel: it carries the `bcm2712` device trees and the RP1 GPIO,
+  SPI, and Ethernet drivers. The stock Fedora firmware `config.txt` already has a `[pi5]`
+  section. This was verified from a Fedora 44 Pi 4 running that kernel (7.2.6); the Pi 5
+  boot itself has not yet been tested in this project.
+
+Raspberry Pi OS remains a supported fallback and needs only `raspi-config` to enable SPI.
 
 ## Steps
 
