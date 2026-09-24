@@ -1,0 +1,32 @@
+# Channel map for open-alliance-daq.
+# adc_channel is the differential pair on the Waveshare ADS1263 HAT:
+#   0 = AIN0/AIN1   1 = AIN2/AIN3   2 = AIN4/AIN5   3 = AIN6/AIN7   4 = AIN8/AIN9
+# volts_per_unit converts the detector's analog output back to its native unit.
+
+[[channel]]
+name = "uv1"
+adc_channel = 0
+volts_per_unit = 1.0        # 2489 set to 1 V/AU on Analog 1
+unit = "AU"
+source = "2489 UV/Vis, I/O block I pins 1(+)/2(-), Analog 1 Out"
+
+[[channel]]
+name = "uv2"
+adc_channel = 1
+volts_per_unit = 1.0        # 2489 Analog 2 (second wavelength or same channel, different scale)
+unit = "AU"
+source = "2489 UV/Vis, I/O block I pins 4(+)/5(-), Analog 2 Out"
+
+[[channel]]
+name = "els"
+adc_channel = 2
+volts_per_unit = 1.0
+unit = "V"
+source = "2424 ELSD Analog 1 Out"
+
+[[channel]]
+name = "pressure"
+adc_channel = 3
+volts_per_unit = 0.0004     # e2695 Chart Out = pressure, 2 V full scale = 5000 psi
+unit = "psi"
+source = "e2695 I/O block B pins 11(+)/12(-), Chart Out"

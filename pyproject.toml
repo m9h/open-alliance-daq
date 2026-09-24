@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "open-alliance-daq"
+version = "0.1.0"
+description = "Open-source analog data acquisition and peak integration for a Waters Alliance e2695 HPLC stack"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "Morgan Hough" }]
+dependencies = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0"]
+
+[project.optional-dependencies]
+pi = ["spidev", "RPi.GPIO", "gpiozero"]
+analysis = ["hplc-py>=0.2", "matplotlib"]
+dev = ["pytest"]
+
+[project.scripts]
+alliance-daq = "alliance_daq.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["alliance_daq"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

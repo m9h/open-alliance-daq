@@ -1,0 +1,99 @@
+# Plan: open-source data from a Waters Alliance stack
+
+## Goal
+
+Record chromatograms from the e2695 / 2489 / 2424 stack with hardware and software that are
+fully open, and integrate peaks without Empower.
+
+## Why analog
+
+The stack's digital ports are closed. Ethernet and IEEE-488 on the e2695 carry Waters'
+proprietary instrument-control protocol, implemented only in Empower and the Waters driver
+packs; no public specification or open implementation exists. The RS-232 ports on this
+generation are service ports. Reverse-engineering the Ethernet protocol is possible in
+principle but is a large project with no guarantee of completeness and no way to validate
+against Waters' own data path.
+
+Every module in the stack can nevertheless be operated **standalone from its own keypad**:
+methods and sample sets on the e2695, wavelengths and output scaling on the 2489, gain and
+nebulizer settings on the 2424. The detectors then present their signal on 0–2 V analog
+outputs, and the e2695 raises a contact closure at every injection. That is the same path
+third-party chromatography data systems (Clarity, Chromeleon with A/D box, ChromPerfect) use.
+This project replaces their proprietary A/D box with a Raspberry Pi and an open ADC HAT.
+
+## Design
+
+```
+ e2695 ──Inject Start──► optocoupler ──► GPIO 25 ─┐
+ 2489  ──Analog 1/2───► ADS1263 ch 0,1 ─────────┤   Raspberry Pi 4
+ 2424  ──Analog───────► ADS1263 ch 2 ───────────┤   alliance-daq record
+ e2695 ──Chart Out────► ADS1263 ch 3 ───────────┘        │
+                                                          ▼
+                                        runs/<timestamp>_<label>.csv
+                                                          │
+                              alliance-daq peaks / OpenChrom / hplc-py
+```
+
+**ADC.** Waveshare High-Precision AD HAT, ADS1263, 32-bit, five differential inputs,
+internal 2.5 V reference so full scale is ±2.5 V. At its 400 SPS internal rate with the
+FIR filter, then decimated to 20 Hz by the logger, noise is roughly 1 µV. The 2489's own
+specified noise floor at 1 V/AU is a few µV, so the ADC does not limit the measurement.
+
+**Rate.** HPLC peaks on a 4.6 mm column are 3–20 s wide. 20 samples/s gives 60+ points across
+the narrowest peak, which is more than integration algorithms need. `--rate` sets it.
+
+**Trigger.** The Inject Start closure gives a hardware t0 accurate to the logger's loop
+period (50 ms at 20 Hz). Retention-time repeatability is therefore limited by the instrument,
+not the logger. `--count 0` re-arms after every run so a full sample set records unattended.
+
+**File format.** One CSV per injection with `# key: value` metadata lines (label, start
+time, rate, per-channel scaling and source), then `time_s` plus one column per channel in
+native units. It reads with `pandas.read_csv(path, comment="#")` and imports into OpenChrom.
+
+**Analysis.** `alliance_daq.analysis` does asymmetric-least-squares baseline removal, SciPy
+peak detection with a noise-derived threshold, and trapezoid integration between the
+0.5 %-prominence bounds. It is meant for quick looks and tests. For method work use
+[OpenChrom](https://lablicate.com/platform/openchrom) (Eclipse-based, CSV import,
+full integration and reporting) or [hplc-py](https://github.com/cremerlab/hplc-py)
+(Chure & Cremer, JOSS 2024) which fits skew-normal peaks and handles overlaps.
+
+## Compute
+
+A Raspberry Pi 4 is sufficient. The load is 20 SPI transactions per second and a CSV
+append; the Waveshare driver targets the Pi 4's RPi.GPIO stack directly. A Pi 5 also works
+but needs `rpi-lgpio` in place of `RPi.GPIO`. A Pi Zero 2 W would run it too, though the
+extra USB ports on a Pi 4 are useful for a keyboard during setup.
+
+## Steps
+
+1. **Identify the fourth module** (photo 04). Read its front label. If it is a 2998 PDA,
+   plan on its two analog channels only.
+2. **Bench-test the DAQ** with the simulator: `alliance-daq record --simulate --trigger now
+   --duration 200` then `alliance-daq peaks`. Confirms software before touching the HPLC.
+3. **Wire the ADC** per `wiring.md`, one channel at a time, checking `alliance-daq live`
+   against the detector display after each.
+4. **Wire the trigger** and confirm with a manual injection that `record` starts on the
+   pulse.
+5. **Calibrate scaling** by setting the 2489 to a known output and reading it back; adjust
+   `volts_per_unit` in the channel map.
+6. **Record a standard** (e.g. caffeine or a uracil/toluene test mix) and compare retention
+   time and area repeatability across five injections. Target: RT RSD < 0.2 %, area RSD
+   < 1 % for a well-behaved peak. This is the acceptance test.
+7. **Choose the analysis tool** (OpenChrom for reports, hplc-py for scripting) and build the
+   calibration curve there.
+
+## Out of scope for now
+
+* Instrument control from the Pi. Would need the Waters protocol.
+* PDA spectra. Only reachable through Empower.
+* Mass detection. Not present in this stack.
+
+## Bill of materials
+
+| Item | Approx. cost |
+|---|---|
+| Raspberry Pi 4 (2 GB), case, PSU, 32 GB card | $60–80 |
+| Waveshare High-Precision AD HAT (ADS1263) | $40 |
+| PC817 optocouplers, resistors, proto board | $5 |
+| Shielded twisted pair, ferrules, Phoenix-style plugs for the detector I/O blocks (3.5 mm pitch, 10/12-position) | $20 |
+| **Total** | **≈ $130** |
