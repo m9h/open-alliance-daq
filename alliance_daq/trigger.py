@@ -7,7 +7,6 @@ time-stamp t0 from hardware rather than from a keypress.
 
 from __future__ import annotations
 
-import threading
 import time
 from typing import Protocol
 
@@ -43,23 +42,22 @@ class KeyboardTrigger:
 class GpioTrigger:
     """Fires on a falling edge of a pulled-up GPIO, i.e. a contact closure to ground.
 
-    Uses gpiozero, which works on Pi 4 (RPi.GPIO backend) and Pi 5 (lgpio backend).
-    ``bounce_s`` suppresses relay chatter; Inject Start is a clean pulse >= 100 ms.
+    Uses :mod:`alliance_daq.gpio`, so it works with RPi.GPIO on Raspberry Pi OS and with
+    libgpiod on other distributions.  Inject Start is a clean pulse >= 100 ms, so no extra
+    debounce is applied beyond the kernel's edge detection.
     """
 
-    def __init__(self, pin: int, bounce_s: float = 0.05):
-        from gpiozero import Button
+    def __init__(self, pin: int):
+        from .gpio import open_gpio
 
-        self._btn = Button(pin, pull_up=True, bounce_time=bounce_s)
-        self._event = threading.Event()
-        self._btn.when_pressed = self._event.set
+        self._pin = pin
+        self._gpio = open_gpio({}, [pin])
 
     def wait(self, timeout: float | None = None) -> bool:
-        self._event.clear()
-        return self._event.wait(timeout)
+        return self._gpio.wait_falling(self._pin, timeout)
 
     def close(self) -> None:
-        self._btn.close()
+        self._gpio.close()
 
 
 class TimedTrigger:

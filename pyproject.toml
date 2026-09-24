@@ -13,7 +13,7 @@ authors = [{ name = "Morgan Hough" }]
 dependencies = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0"]
 
 [project.optional-dependencies]
-pi = ["spidev", "RPi.GPIO", "gpiozero"]
+pi = ["spidev", "gpiod>=2.1"]          # libgpiod backend; RPi.GPIO is picked up automatically if installed
 analysis = ["hplc-py>=0.2", "matplotlib", "jinja2>=3"]
 dev = ["pytest", "hplc-py>=0.2", "matplotlib", "jinja2>=3"]
 

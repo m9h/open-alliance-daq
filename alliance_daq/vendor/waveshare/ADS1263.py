@@ -28,7 +28,10 @@
 #
 
 from . import config
-import RPi.GPIO as GPIO
+
+
+class GPIO:  # open-alliance-daq: only the two constants the driver uses
+    LOW, HIGH = 0, 1
 
 # gain
 ADS1263_GAIN = {
