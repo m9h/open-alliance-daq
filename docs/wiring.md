@@ -1,5 +1,9 @@
 # Wiring
 
+![Wiring diagram](wiring.svg)
+
+*Regenerate with `python docs/tools/make_wiring_svg.py` after editing the pin tables below.*
+
 All pin numbers are read off the rear-panel legends in `photos/`. **Verify each one against
 the physical label before connecting anything.** Power everything down while wiring.
 

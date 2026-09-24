@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780">
+<rect width="1200" height="780" fill="#fff"/>
+<rect x="60" y="60" width="250" height="175" rx="6" fill="#f5f5f5" stroke="#212121" stroke-width="1.5"/>
+<text x="70" y="80" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="start" font-weight="bold" fill="#212121">Waters 2489 UV/Vis</text>
+<text x="70" y="96" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">rear I/O block I</text>
+<rect x="304" y="94" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="104" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Analog 1 Out +</text>
+<text x="322" y="94" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">1</text>
+<rect x="304" y="120" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="130" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Analog 1 Out −</text>
+<text x="322" y="120" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">2</text>
+<rect x="304" y="146" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="156" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Ground</text>
+<text x="322" y="146" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">3</text>
+<rect x="304" y="172" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="182" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Analog 2 Out +</text>
+<text x="322" y="172" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">4</text>
+<rect x="304" y="198" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="208" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Analog 2 Out −</text>
+<text x="322" y="198" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">5</text>
+<rect x="60" y="255" width="250" height="100" rx="6" fill="#f5f5f5" stroke="#212121" stroke-width="1.5"/>
+<text x="70" y="275" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="start" font-weight="bold" fill="#212121">Waters 2424 ELSD</text>
+<text x="70" y="291" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">rear I/O block I — confirm pins on its label</text>
+<rect x="304" y="310" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="320" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Analog Out +</text>
+<text x="322" y="310" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">1</text>
+<rect x="304" y="336" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="346" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Analog Out −</text>
+<text x="322" y="336" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">2</text>
+<rect x="60" y="375" width="250" height="160" rx="6" fill="#f5f5f5" stroke="#212121" stroke-width="1.5"/>
+<text x="70" y="395" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="start" font-weight="bold" fill="#212121">Waters e2695 Separations Module</text>
+<text x="70" y="411" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">rear I/O block B</text>
+<rect x="304" y="414" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="424" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Chart Out +</text>
+<text x="322" y="414" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">B11</text>
+<rect x="304" y="440" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="450" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Chart Out −</text>
+<text x="322" y="440" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">B12</text>
+<rect x="304" y="466" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="476" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Inject Start +</text>
+<text x="322" y="466" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">B1</text>
+<rect x="304" y="492" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="296" y="502" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#212121">Inject Start −</text>
+<text x="322" y="492" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" fill="#757575">B2</text>
+<rect x="560" y="60" width="150" height="510" rx="6" fill="#f5f5f5" stroke="#212121" stroke-width="1.5"/>
+<text x="570" y="80" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="start" font-weight="bold" fill="#212121">Waveshare AD HAT</text>
+<text x="570" y="96" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">ADS1263, screw terminals</text>
+<rect x="554" y="94" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="104" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN0</text>
+<rect x="554" y="128" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="138" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN1</text>
+<rect x="554" y="162" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="172" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN2</text>
+<rect x="554" y="196" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="206" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN3</text>
+<rect x="554" y="230" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="240" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN4</text>
+<rect x="554" y="264" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="274" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN5</text>
+<rect x="554" y="298" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="308" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN6</text>
+<rect x="554" y="332" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="342" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN7</text>
+<rect x="554" y="366" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="376" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN8</text>
+<rect x="554" y="400" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="410" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AIN9</text>
+<rect x="554" y="434" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="444" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AINCOM</text>
+<rect x="554" y="468" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="478" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">AGND</text>
+<rect x="554" y="502" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="512" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">5V</text>
+<rect x="554" y="536" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="574" y="546" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">GND</text>
+<path d="M650,100 h8 v34 h-8" fill="none" stroke="#757575" stroke-width="1"/>
+<text x="664" y="121.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">ch 0</text>
+<path d="M650,168 h8 v34 h-8" fill="none" stroke="#757575" stroke-width="1"/>
+<text x="664" y="189.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">ch 1</text>
+<path d="M650,236 h8 v34 h-8" fill="none" stroke="#757575" stroke-width="1"/>
+<text x="664" y="257.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">ch 2</text>
+<path d="M650,304 h8 v34 h-8" fill="none" stroke="#757575" stroke-width="1"/>
+<text x="664" y="325.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">ch 3</text>
+<path d="M650,372 h8 v34 h-8" fill="none" stroke="#757575" stroke-width="1"/>
+<text x="664" y="393.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">ch 4</text>
+<rect x="900" y="60" width="240" height="300" rx="6" fill="#f5f5f5" stroke="#212121" stroke-width="1.5"/>
+<text x="910" y="80" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="start" font-weight="bold" fill="#212121">Raspberry Pi 4</text>
+<text x="910" y="96" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">40-pin header; the HAT stacks on it</text>
+<rect x="894" y="124" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="914" y="134" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">3V3  (pin 1)</text>
+<rect x="894" y="194" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="914" y="204" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">GPIO 25  (pin 22)</text>
+<rect x="894" y="264" width="12" height="12" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="914" y="274" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="normal" fill="#212121">GND  (pin 20)</text>
+<text x="910" y="330" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">SPI0 + GPIO 17/18/22 are used by the HAT</text>
+<polyline points="316,100 345,100 345,100 554,100" fill="none" stroke="#c62828" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,126 361,126 361,134 554,134" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,178 377,178 377,168 554,168" fill="none" stroke="#c62828" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,204 393,204 393,202 554,202" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,316 409,316 409,236 554,236" fill="none" stroke="#c62828" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,342 425,342 425,270 554,270" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,420 441,420 441,304 554,304" fill="none" stroke="#c62828" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,446 457,446 457,338 554,338" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="316,152 473,152 473,474 554,474" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="489,90 489,474 554,474" fill="none" stroke="#757575" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="5,4"/>
+<text x="493" y="52" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="end" font-weight="normal" fill="#757575">cable shields → AGND (HAT end only)</text>
+<rect x="640" y="610" width="120" height="90" rx="4" fill="#fff" stroke="#212121" stroke-width="1.5"/>
+<text x="700" y="632" font-family="Helvetica, Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" fill="#212121">PC817</text>
+<text x="700" y="648" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" fill="#757575">optocoupler</text>
+<text x="648" y="672" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">1 A</text>
+<text x="648" y="694" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">2 K</text>
+<text x="752" y="672" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="end" font-weight="normal" fill="#212121">4 C</text>
+<text x="752" y="694" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="end" font-weight="normal" fill="#212121">3 E</text>
+<polyline points="316,472 330,472 330,668 640,668" fill="none" stroke="#ef6c00" stroke-width="2" stroke-linejoin="round"/>
+<rect x="462" y="661" width="36" height="14" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="480" y="657" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" fill="#212121">1 kΩ</text>
+<polyline points="316,498 322,498 322,690 640,690" fill="none" stroke="#ef6c00" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="760,668 860,668 860,200 894,200" fill="none" stroke="#ef6c00" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="820,668 820,130 894,130" fill="none" stroke="#ef6c00" stroke-width="2" stroke-linejoin="round"/>
+<rect x="813" y="402" width="14" height="36" fill="#fff" stroke="#212121" stroke-width="1.2"/>
+<text x="809" y="424" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="end" font-weight="normal" fill="#212121">10 kΩ pull-up</text>
+<circle cx="820" cy="668" r="3" fill="#ef6c00"/>
+<polyline points="760,690 880,690 880,270 894,270" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round"/>
+<text x="60" y="562" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="bold" fill="#212121">Inject Start closure → isolated trigger</text>
+<text x="60" y="580" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">GPIO 25 idles high, pulled low at injection.</text>
+<text x="60" y="596" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">If B1/B2 is a dry contact, feed the LED from</text>
+<text x="60" y="612" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">the HAT's 5 V via the 1 kΩ (see wiring.md).</text>
+<text x="60" y="32" font-family="Helvetica, Arial, sans-serif" font-size="16" text-anchor="start" font-weight="bold" fill="#212121">open-alliance-daq wiring — Waters Alliance stack → ADS1263 HAT → Raspberry Pi 4</text>
+<rect x="900" y="420" width="240" height="140" rx="6" fill="#f5f5f5" stroke="#212121" stroke-width="1.5"/>
+<text x="910" y="440" font-family="Helvetica, Arial, sans-serif" font-size="14" text-anchor="start" font-weight="bold" fill="#212121">Legend</text>
+<polyline points="912,472 944,472" fill="none" stroke="#c62828" stroke-width="2" stroke-linejoin="round"/>
+<text x="952" y="476" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">analog +</text>
+<polyline points="912,488 944,488" fill="none" stroke="#1565c0" stroke-width="2" stroke-linejoin="round"/>
+<text x="952" y="492" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">analog −</text>
+<polyline points="912,504 944,504" fill="none" stroke="#2e7d32" stroke-width="2" stroke-linejoin="round"/>
+<text x="952" y="508" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">signal / power ground</text>
+<polyline points="912,520 944,520" fill="none" stroke="#ef6c00" stroke-width="2" stroke-linejoin="round"/>
+<text x="952" y="524" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">trigger</text>
+<polyline points="912,536 944,536" fill="none" stroke="#757575" stroke-width="2" stroke-linejoin="round" stroke-dasharray="5,4"/>
+<text x="952" y="540" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#212121">cable shield</text>
+<text x="60" y="740" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">All instrument pin numbers were read from the rear-panel legends in docs/photos/. Verify each against the physical label before wiring; power everything down first.</text>
+<text x="60" y="758" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" fill="#757575">Only ONE instrument ground (2489 block I pin 3) goes to AGND. The differential inputs need it for common-mode reference; a second ground makes a loop.</text>
+</svg>

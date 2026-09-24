@@ -1,0 +1,24 @@
+# systemd unit: arm the logger at boot and record one run per Inject Start pulse.
+# Install: see deploy/README.md
+[Unit]
+Description=open-alliance-daq HPLC logger
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/open-alliance-daq
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/pi/open-alliance-daq/.venv/bin/alliance-daq record \
+    --channels config/channels.toml \
+    --duration 900 \
+    --rate 20 \
+    --trigger gpio --trigger-pin 25 \
+    --count 0 \
+    --label run \
+    --out /home/pi/hplc-runs
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

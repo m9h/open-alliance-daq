@@ -6,10 +6,13 @@ detector. No Empower, no Waters drivers. A Raspberry Pi 4 with a 32-bit ADC HAT 
 the detectors' analog outputs, the e2695's Inject Start pulse provides hardware t0, and
 Python integrates the peaks.
 
+![Wiring diagram](docs/wiring.svg)
+
 * [docs/plan.md](docs/plan.md) — why analog, what the closed ports are, the full design
 * [docs/wiring.md](docs/wiring.md) — pin-by-pin wiring from the rear-panel photos
 * [docs/instrument-identification.md](docs/instrument-identification.md) — what each module is, with evidence
 * [docs/photos/](docs/photos/) — the rear-panel photos the plan is based on
+* [docs/questions-for-previous-owner.md](docs/questions-for-previous-owner.md) — what only someone who ran this stack can answer
 
 ## Hardware
 
@@ -38,6 +41,8 @@ uv pip install -e '.[pi]'
 alliance-daq live --rate 2                 # check every channel reads what the front panel shows
 alliance-daq record --duration 900 --label std-mix --count 0   # arm; each Inject Start pulse starts a 15 min run
 ```
+
+To run the logger as a service that re-arms after every injection, see `deploy/README.md`.
 
 Edit `config/channels.example.toml` to match your detector output scaling and pass it
 with `--channels`. Each run lands in `runs/` as a CSV with metadata comment lines;
