@@ -1,12 +1,22 @@
 % knitr (Sweave-style) report for open-alliance-daq runs using chromatographR.
-% Build:  Rscript -e 'knitr::knit2pdf("report.Rnw")'   (or: knitr::knit("report.Rnw"); tectonic report.tex)
-% Needs:  install.packages(c("knitr", "chromatographR", "xtable"))
-% NOT exercised in this repo's CI (no R here). Treat as a starting point and check the
-% chromatographR API against its vignette: https://ethanbass.github.io/chromatographR/
+% Build:  RUN_CSV=../runs/<run>.csv RUN_CHANNEL=uv1 Rscript -e 'knitr::knit2pdf("report.Rnw")'
+%   or:   knitr::knit("report.Rnw"); tectonic report.tex
+% Needs:  knitr, xtable (CRAN) and chromatographR. CRAN archived chromatographR in 2022; install
+%         the maintained version from the author's r-universe:
+%         install.packages("chromatographR", repos = c("https://ethanbass.r-universe.dev", "https://cloud.r-project.org"))
+% Tested: R 4.6.1, chromatographR 0.8.0, knitr, tectonic 0.17 on macOS (2026-09-23). Not run in CI.
+% Notes:  get_peaks(sd_max=) is in SAMPLES, so it is derived from the sample rate below; the fit
+%         figure is chromatographR's own plot method (peak boundaries as ticks, no axes).
 \documentclass[10pt,a4paper]{article}
 \usepackage[margin=2.2cm]{geometry}
-\usepackage{booktabs,graphicx,helvet}
-\renewcommand{\familydefault}{\sfdefault}
+\usepackage{booktabs,graphicx,float}
+\usepackage{iftex}
+\ifxetex
+  \usepackage{fontspec}
+  \setmainfont{texgyreheros}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\else
+  \usepackage[T1]{fontenc}\usepackage{tgheros}\renewcommand{\familydefault}{\sfdefault}
+\fi
 \title{HPLC run report (chromatographR)}
 \begin{document}
 \maketitle
@@ -14,34 +24,53 @@
 <<setup, include=FALSE>>=
 library(chromatographR)
 library(xtable)
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 6.5, fig.height = 2.6)
-csv_path <- Sys.getenv("RUN_CSV", "../runs/demo.csv")   # set RUN_CSV=path/to/run.csv
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 6.5, fig.height = 2.8, fig.pos = "H")
+csv_path <- Sys.getenv("RUN_CSV", "../runs/demo.csv")
 channel  <- Sys.getenv("RUN_CHANNEL", "uv1")
 df <- read.csv(csv_path, comment.char = "#")
-# chromatographR expects a list of time x wavelength matrices; we have one "wavelength" (the channel).
-m <- as.matrix(df[, channel, drop = FALSE]); rownames(m) <- df$time_s / 60; colnames(m) <- channel
+chans <- setdiff(names(df), "time_s")
+# chromatographR works on a list of time x wavelength matrices. We have single-channel detectors,
+# so each channel becomes a one-column matrix with a numeric pseudo-wavelength name.
+lambda <- 254
+m <- matrix(df[[channel]], ncol = 1, dimnames = list(sprintf("%.5f", df$time_s / 60), as.character(lambda)))
 chroms <- list(run = m)
+# Baseline removal (asymmetric least squares via ptw) on the time axis; no wavelength smoothing
+# or interpolation since there is only one column.
+chroms <- preprocess(chroms, dim1 = df$time_s / 60, dim2 = lambda, remove.time.baseline = TRUE,
+                     spec.smooth = FALSE, interpolate_rows = FALSE, interpolate_cols = FALSE,
+                     cl = 1, show_progress = FALSE)
 @
 
-\section*{Run \texttt{\Sexpr{basename(csv_path)}}}
-Channel \texttt{\Sexpr{channel}}, \Sexpr{nrow(df)} samples, \Sexpr{round(max(df$time_s), 1)} s.
+\section*{Run \texttt{\Sexpr{gsub("_", "\\\\_", basename(csv_path))}}}
+Channel \texttt{\Sexpr{channel}}, \Sexpr{nrow(df)} samples, \Sexpr{round(max(df$time_s), 1)} s
+at \Sexpr{round(1 / median(diff(df$time_s)), 1)} Hz.
 
-<<traces, fig.cap="Recorded channels.">>=
-par(mfrow = c(length(setdiff(names(df), "time_s")), 1), mar = c(3, 4, 1.5, 1))
-for (ch in setdiff(names(df), "time_s")) plot(df$time_s / 60, df[[ch]], type = "l", xlab = "time (min)", ylab = ch, main = ch)
+<<traces, fig.height=1.3*length(chans)+0.5, fig.cap="All recorded channels.">>=
+par(mfrow = c(length(chans), 1), mar = c(3.2, 4, 1.5, 1), mgp = c(2, 0.6, 0), cex = 0.8)
+for (ch in chans) plot(df$time_s / 60, df[[ch]], type = "l", lwd = 1.5, col = "#2a78d6",
+                       xlab = if (ch == tail(chans, 1)) "time (min)" else "", ylab = ch, main = ch, adj = 0)
 @
 
 <<peaks>>=
-pks <- get_peaks(chroms, lambdas = channel, fit = "egh")   # exponential-Gaussian hybrid fit
-pt  <- get_peaktable(pks, response = "area")
-tab <- pks$run[[channel]]
+rate_hz <- 1 / median(diff(df$time_s))
+# sd_max is in samples: allow peaks up to 15 s wide (sigma) at this sample rate.
+pks <- get_peaks(chroms, lambdas = lambda, fit = "egh", sd_max = 15 * rate_hz,
+                 noise_threshold = 0.005, cl = 1, show_progress = FALSE)   # exponential-Gaussian hybrid fit
+pks <- filter_peaks(pks, min_height = 0.02 * max(chroms$run))    # drop noise above 2 % of the tallest peak
+tab <- pks$run[[as.character(lambda)]]
+tab$rt_s <- tab$rt * 60
+tab <- tab[, intersect(c("rt_s", "rt", "height", "area", "FWHM", "tau", "r.squared"), names(tab))]
+tab$area_pct <- 100 * tab$area / sum(tab$area)
 @
 
-<<fitplot, fig.cap="Exponential-Gaussian hybrid fit.">>=
-plot(pks, chrom_list = chroms, index = "run", lambda = channel)
+<<fitplot, fig.cap=paste0("Exponential-Gaussian hybrid fit of ", channel, " (chromatographR).")>>=
+par(mar = c(3.2, 4, 1, 1), mgp = c(2, 0.6, 0), cex = 0.8)
+plot(pks, chrom_list = chroms, idx = 1, lambda = lambda, ticks = TRUE, numbers = TRUE, color = "#2a78d6")
 @
 
 <<table, results="asis">>=
-print(xtable(tab, caption = "Peak table (chromatographR, EGH fit)"), booktabs = TRUE, include.rownames = FALSE)
+print(xtable(tab, digits = c(0, 2, 3, 4, 4, 3, 3, 4, 1),
+             caption = paste0("Peak table for ", channel, " (chromatographR, EGH fit). Area in signal units x minutes.")),
+      booktabs = TRUE, include.rownames = FALSE, table.placement = "H")
 @
 \end{document}

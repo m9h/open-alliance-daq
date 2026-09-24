@@ -6,3 +6,7 @@ build/
 *.egg-info/
 runs/*.csv
 .pytest_cache/
+r/figure/
+r/report.tex
+r/report.pdf
+r/*.log

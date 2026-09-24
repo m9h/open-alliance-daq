@@ -51,7 +51,7 @@ with `--channels`. Each run lands in `runs/` as a CSV with metadata comment line
 `pandas.read_csv(path, comment="#")` reads it. `alliance-daq quant` fits and quantifies the peaks with
 hplc-py, `alliance-daq report` turns one or more runs into a PDF, and `alliance-daq peaks` is
 the dependency-free quick look. An R alternative using chromatographR and knitr is in
-`r/` (untested here; needs R).
+`r/report.Rnw` (tested locally with R 4.6.1; chromatographR comes from the author's r-universe since CRAN archived it).
 
 ## Layout
 

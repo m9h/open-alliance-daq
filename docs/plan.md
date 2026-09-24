@@ -74,7 +74,8 @@ channel map, small-multiple traces, each hplc-py fit with shaded components, and
 (retention time, amplitude, width, skew, area, area %). Figures are vector PDF and the `.tex`
 is kept, so a report can be hand-edited or rebuilt. It compiles with tectonic (no TeX Live
 needed) or latexmk. For an R workflow, `r/report.Rnw` is a knitr template that does the same
-with chromatographR; it reads the same CSVs. Pweave was considered and rejected: no release
+with chromatographR (EGH peak fits); it reads the same CSVs and was verified against the
+simulated run. chromatographR is installed from the author's r-universe, not CRAN. Pweave was considered and rejected: no release
 since 2018 and it no longer imports against current IPython.
 
 No desktop chromatography data system is part of the plan. The CSV format is deliberately
