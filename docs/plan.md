@@ -83,9 +83,12 @@ plain so any future tool can import it.
 
 ## Compute
 
-A Raspberry Pi 4 is sufficient for acquisition: the load is 20 SPI transactions per second
-and a CSV append. A Pi 5 with NVMe storage is the better instrument box for the analysis and
-reporting that run on the same machine, and for storage reliability.
+**Acquisition runs on the Pi 4** (Fedora 44, the same kernel family). Its BCM2835 SPI
+controller is fully supported and its device tree already carries the disabled `spi0` node
+plus `spidev` children, so `dtparam=spi=on` is all it needs. The load is 20 SPI transactions
+per second and a CSV append. **The Pi 5 (16 GB) is the analysis machine**: hplc-py fits,
+reports, and the JAX work, reading the run CSVs from the Pi 4. See the Pi 5 note below for
+why it is not the acquisition box yet.
 
 **OS: Fedora.** Fedora is the lab's standard and the project targets it first. What differs
 from Raspberry Pi OS, and how it is handled:
@@ -97,11 +100,15 @@ from Raspberry Pi OS, and how it is handled:
 * SPI is enabled through the Pi firmware's `config.txt` in `/boot/efi` (`dtparam=spi=on`),
   which Fedora's `bcm283x-firmware` package supports the same way Raspberry Pi OS does.
   `deploy/fedora-setup.sh` does this, plus udev rules for `/dev/spidev*` and `/dev/gpiochip*`.
-* Pi 5 on Fedora needs the Fedora ARM maintainer's kernel from the `pbrobinson/a64-kernel`
-  COPR rather than the stock kernel: it carries the `bcm2712` device trees and the RP1 GPIO,
-  SPI, and Ethernet drivers. The stock Fedora firmware `config.txt` already has a `[pi5]`
-  section. This was verified from a Fedora 44 Pi 4 running that kernel (7.2.6); the Pi 5
-  boot itself has not yet been tested in this project.
+* **Pi 5 cannot drive the HAT under Fedora today.** On the Pi 5 the header SPI lives in the
+  RP1 I/O chip, and the mainline kernel describes RP1 through a device-tree overlay applied by
+  the `rp1_pci` driver. As of the `pbrobinson/a64-kernel` 7.2.2 build (Fedora 44, checked
+  2026-09-24) that overlay provides clocks, GPIO/pinctrl, PWM, I2C, Ethernet, USB and CSI, but
+  **no SPI controller**, and `spi-dw-mmio` has no RP1 binding. `/dev/spidev*` therefore cannot
+  exist, whatever `config.txt` says. RP1 GPIO does work (`/dev/gpiochip4`, compatible
+  `raspberrypi,rp1-gpio`), so the trigger input would be fine; only SPI is missing. Revisit
+  when RP1 SPI lands upstream (it is in the in-flight RP1 series from SUSE) and reaches that
+  COPR; until then the Pi 5 is the analysis and reporting machine, not the acquisition one.
 
 Raspberry Pi OS remains a supported fallback and needs only `raspi-config` to enable SPI.
 

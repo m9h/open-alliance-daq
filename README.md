@@ -18,7 +18,7 @@ Python integrates the peaks.
 
 | Item | Notes |
 |---|---|
-| Raspberry Pi 4 or 5 | Fedora (primary; see `deploy/README.md`) or Raspberry Pi OS 64-bit. The Pi 5 with NVMe is the better instrument box; the DAQ load itself is tiny |
+| Raspberry Pi 4 | Fedora (primary; see `deploy/README.md`) or Raspberry Pi OS 64-bit. Not a Pi 5 under Fedora: the mainline RP1 overlay has no SPI yet (docs/plan.md, Compute) |
 | Waveshare High-Precision AD HAT (ADS1263) | 5 differential channels, 32-bit, open schematic |
 | PC817 optocoupler + 1 kΩ + 10 kΩ | isolates the e2695 Inject Start closure from the Pi GPIO |
 | Shielded twisted pair, 22–24 AWG | one pair per analog channel |

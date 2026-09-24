@@ -47,3 +47,8 @@ What the script does: installs `python3-devel`, `gcc`, `libgpiod-utils`, `git`; 
 device tree to grub); autoloads `spi-bcm2835` and `spidev`; creates `gpio` and `spi` groups
 with udev rules for `/dev/gpiochip*` and `/dev/spidev*`; and installs the systemd unit with the
 right user and paths. It does not enable the unit; do that after `live` shows sane numbers.
+
+**Pi 5 caveat (Fedora).** The RP1 device-tree overlay in the Fedora/a64-kernel builds exposes
+GPIO (`/dev/gpiochip4`, set `ALLIANCE_DAQ_GPIOCHIP=/dev/gpiochip4`) but no SPI controller, so
+the ADS1263 HAT cannot be used on a Pi 5 under Fedora until RP1 SPI is upstream. Use a Pi 4 for
+acquisition.
