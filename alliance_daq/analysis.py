@@ -1,7 +1,7 @@
 """Load run CSVs, remove baseline, find and integrate peaks.
 
-This is deliberately small.  For method-grade integration use OpenChrom (GUI) or
-hplc-py (``pip install hplc-py``); see docs/plan.md.
+This is deliberately small and needs only SciPy.  For method-grade quantification use
+:mod:`alliance_daq.quant` (hplc-py); see docs/plan.md.
 """
 
 from __future__ import annotations

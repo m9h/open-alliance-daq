@@ -11,11 +11,26 @@ from .channels import DEFAULT_MAP, ChannelMap
 from .logger import RunLogger
 
 
+class _VirtualClock:
+    """Advances only when 'slept', so simulated runs finish instantly and deterministically."""
+
+    def __init__(self):
+        self.t = 0.0
+
+    def __call__(self) -> float:
+        return self.t
+
+    def sleep(self, s: float) -> None:
+        self.t += s
+
+
 def _build_adc(args):
     if args.simulate:
         from .adc import SimulatedAdc
 
-        return SimulatedAdc()
+        clock = _VirtualClock()
+        args._clock = clock
+        return SimulatedAdc(clock=clock)
     from .adc import ADS1263Adc
 
     return ADS1263Adc(adc_rate_sps=args.adc_rate)
@@ -37,7 +52,8 @@ def cmd_record(args) -> int:
     channels = ChannelMap.load(args.channels) if args.channels else DEFAULT_MAP
     adc = _build_adc(args)
     trigger = _build_trigger(args)
-    logger = RunLogger(adc, channels, rate_hz=args.rate, out_dir=args.out)
+    clock = getattr(args, "_clock", None)
+    logger = RunLogger(adc, channels, rate_hz=args.rate, out_dir=args.out, **({"clock": clock, "sleep": clock.sleep} if clock else {}))
 
     def _stop(*_):
         logger.stop_requested = True
@@ -95,6 +111,25 @@ def cmd_peaks(args) -> int:
     return 0
 
 
+def cmd_quant(args) -> int:
+    from .analysis import load_run
+    from .quant import quantify, save_fit_figure
+
+    df, meta = load_run(args.csv)
+    col = args.column or df.columns[1]
+    known = [float(x) for x in args.known.split(",")] if args.known else None
+    peaks, chrom = quantify(df, col, prominence=args.prominence, baseline_window_min=args.baseline_window, known_peaks_s=known)
+    src = Path(args.csv)
+    out = Path(args.out) if args.out else src.with_name(src.stem + f"_{col}_peaks.csv")
+    peaks.to_csv(out, index=False, float_format="%.6g")
+    print(f"# {src.name}  column={col}  started={meta.get('started', '?')}  peaks={len(peaks)}  -> {out}")
+    print(peaks.to_string(index=False, float_format=lambda x: f"{x:.5g}"))
+    if args.plot:
+        fig = save_fit_figure(chrom, args.plot)
+        print(f"# figure -> {fig}")
+    return 0 if len(peaks) else 1
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="alliance-daq", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -118,11 +153,21 @@ def main(argv=None) -> int:
     l = sub.add_parser("live", parents=[common], help="print live channel values")
     l.set_defaults(func=cmd_live)
 
-    k = sub.add_parser("peaks", help="find and integrate peaks in a run CSV")
+    k = sub.add_parser("peaks", help="quick-look peak integration (SciPy only, no extra deps)")
     k.add_argument("csv")
     k.add_argument("--column", help="signal column (default: first channel)")
     k.add_argument("--min-height", type=float, default=None)
     k.set_defaults(func=cmd_peaks)
+
+    q = sub.add_parser("quant", help="fit and quantify peaks with hplc-py (needs the [analysis] extra)")
+    q.add_argument("csv")
+    q.add_argument("--column", help="signal column (default: first channel)")
+    q.add_argument("--prominence", type=float, default=0.01, help="min peak prominence relative to the tallest peak (default 0.01)")
+    q.add_argument("--baseline-window", type=float, default=1.0, help="baseline correction window in minutes (default 1.0)")
+    q.add_argument("--known", help="comma-separated retention times in seconds to seed the fit")
+    q.add_argument("--out", help="peak table CSV (default: <run>_<column>_peaks.csv next to the run)")
+    q.add_argument("--plot", help="save hplc-py's fit figure to this PNG path")
+    q.set_defaults(func=cmd_quant)
 
     args = p.parse_args(argv)
     return args.func(args)

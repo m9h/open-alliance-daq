@@ -15,7 +15,7 @@ dependencies = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0"]
 [project.optional-dependencies]
 pi = ["spidev", "RPi.GPIO", "gpiozero"]
 analysis = ["hplc-py>=0.2", "matplotlib"]
-dev = ["pytest"]
+dev = ["pytest", "hplc-py>=0.2", "matplotlib"]
 
 [project.scripts]
 alliance-daq = "alliance_daq.cli:main"

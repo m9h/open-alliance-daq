@@ -9,5 +9,6 @@ jobs:
       - run: uv python install 3.12
       - run: uv sync --extra dev
       - run: uv run pytest -q
-      - run: uv run alliance-daq record --simulate --trigger now --duration 30 --rate 20 --out /tmp/runs --label ci
+      - run: uv run alliance-daq record --simulate --trigger now --duration 200 --rate 20 --out /tmp/runs --label ci
       - run: uv run alliance-daq peaks /tmp/runs/*_ci.csv
+      - run: uv run alliance-daq quant /tmp/runs/*_ci.csv --plot /tmp/fit.png

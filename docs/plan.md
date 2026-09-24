@@ -31,7 +31,7 @@ This project replaces their proprietary A/D box with a Raspberry Pi and an open 
                                                           ▼
                                         runs/<timestamp>_<label>.csv
                                                           │
-                              alliance-daq peaks / OpenChrom / hplc-py
+                    alliance-daq quant (hplc-py)  /  alliance-daq peaks (quick look)
 ```
 
 **ADC.** Waveshare High-Precision AD HAT, ADS1263, 32-bit, five differential inputs,
@@ -48,14 +48,29 @@ not the logger. `--count 0` re-arms after every run so a full sample set records
 
 **File format.** One CSV per injection with `# key: value` metadata lines (label, start
 time, rate, per-channel scaling and source), then `time_s` plus one column per channel in
-native units. It reads with `pandas.read_csv(path, comment="#")` and imports into OpenChrom.
+native units. It reads with `pandas.read_csv(path, comment="#")` and into R with `read.csv(comment.char = "#")`.
 
-**Analysis.** `alliance_daq.analysis` does asymmetric-least-squares baseline removal, SciPy
-peak detection with a noise-derived threshold, and trapezoid integration between the
-0.5 %-prominence bounds. It is meant for quick looks and tests. For method work use
-[OpenChrom](https://lablicate.com/platform/openchrom) (Eclipse-based, CSV import,
-full integration and reporting) or [hplc-py](https://github.com/cremerlab/hplc-py)
-(Chure & Cremer, JOSS 2024) which fits skew-normal peaks and handles overlaps.
+**Analysis.** Two tiers, both open source and both in this repo's Python stack.
+
+* `alliance-daq quant` is the method-grade path. It wraps
+  [hplc-py](https://github.com/cremerlab/hplc-py) (Chure & Cremer, JOSS 2024), which fits a
+  mixture of skew-normal peaks to the baseline-corrected signal. Overlapping peaks are
+  resolved by deconvolution rather than split at a valley, known retention times can seed
+  the fit, and the output is a peak table (retention time, amplitude, width, skew, area in
+  signal-units × seconds) plus hplc-py's reconstruction figure. Calibration curves are a
+  few lines of pandas on top of the peak tables.
+* `alliance-daq peaks` is the quick look: asymmetric-least-squares baseline, SciPy peak
+  detection with a noise-derived threshold, trapezoid integration. It needs nothing beyond
+  SciPy and is what the tests and CI exercise first.
+
+If an R workflow is preferred, [chromatographR](https://github.com/ethanbass/chromatographR)
+(Bass, CRAN) covers the same ground for HPLC-UV/DAD: preprocessing, retention-time alignment
+across many runs, Gaussian / exponential-Gaussian peak fitting, and peak-table construction.
+Its alignment tools are the better choice once there are dozens of runs to compare. It reads
+this project's CSVs directly.
+
+No desktop chromatography data system is part of the plan. The CSV format is deliberately
+plain so any future tool can import it.
 
 ## Compute
 
@@ -79,8 +94,8 @@ extra USB ports on a Pi 4 are useful for a keyboard during setup.
 6. **Record a standard** (e.g. caffeine or a uracil/toluene test mix) and compare retention
    time and area repeatability across five injections. Target: RT RSD < 0.2 %, area RSD
    < 1 % for a well-behaved peak. This is the acceptance test.
-7. **Choose the analysis tool** (OpenChrom for reports, hplc-py for scripting) and build the
-   calibration curve there.
+7. **Build the calibration curve** from `alliance-daq quant` peak tables over a standard
+   dilution series; keep it as a CSV next to the runs.
 
 ## Out of scope for now
 

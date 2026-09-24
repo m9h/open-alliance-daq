@@ -95,3 +95,23 @@ def test_ads1263_raw_conversion():
     assert ADS1263Adc._raw_to_volts(0x7FFFFFFF) == 2.5
     assert abs(ADS1263Adc._raw_to_volts(0x80000000) + 2.5) < 1e-6
     assert ADS1263Adc._raw_to_volts(0) == 0.0
+
+
+def test_hplcpy_quant_matches_simulator(tmp_path):
+    pytest = __import__("pytest")
+    pytest.importorskip("hplc")
+    import math
+
+    from alliance_daq.quant import quantify
+
+    clock = FakeClock()
+    adc = SimulatedAdc(noise_v=20e-6, clock=clock)
+    logger = RunLogger(adc, DEFAULT_MAP, rate_hz=20, out_dir=tmp_path, clock=clock, sleep=clock.sleep)
+    res = logger.run_triggered(ImmediateTrigger(), duration_s=200.0)
+    df, _ = load_run(res.path)
+    peaks, _ = quantify(df, "uv1", prominence=0.02)
+    assert len(peaks) == 3
+    for (_, row), (rt, h, s) in zip(peaks.iterrows(), SimulatedAdc.PEAKS):
+        assert abs(row.rt_s - rt) < 0.5
+        true_area = h * s * math.sqrt(2 * math.pi)
+        assert abs(row.area - true_area) / true_area < 0.05

@@ -29,7 +29,8 @@ Python integrates the peaks.
 ```bash
 uv venv && uv pip install -e '.[dev]'
 uv run alliance-daq record --simulate --trigger now --duration 200 --label demo
-uv run alliance-daq peaks runs/*_demo.csv
+uv run alliance-daq peaks runs/*_demo.csv          # quick look, SciPy only
+uv run alliance-daq quant runs/*_demo.csv --plot fit.png   # hplc-py skew-normal fit + peak table
 uv run pytest
 ```
 
@@ -46,7 +47,8 @@ To run the logger as a service that re-arms after every injection, see `deploy/R
 
 Edit `config/channels.example.toml` to match your detector output scaling and pass it
 with `--channels`. Each run lands in `runs/` as a CSV with metadata comment lines;
-`pandas.read_csv(path, comment="#")` reads it, and OpenChrom or hplc-py can take it from there.
+`pandas.read_csv(path, comment="#")` reads it. `alliance-daq quant` fits and quantifies the peaks with
+hplc-py; `alliance-daq peaks` is the dependency-free quick look.
 
 ## Layout
 
@@ -56,8 +58,9 @@ alliance_daq/
   trigger.py     Inject Start GPIO trigger (gpiozero), keyboard, timed, immediate
   channels.py    TOML channel map and unit scaling
   logger.py      fixed-rate acquisition loop -> CSV with metadata header
-  analysis.py    ALS baseline, peak finding, trapezoid integration
-  cli.py         alliance-daq record | live | peaks
+  analysis.py    quick-look: ALS baseline, peak finding, trapezoid integration
+  quant.py       method-grade: hplc-py skew-normal peak fitting and quantification
+  cli.py         alliance-daq record | live | peaks | quant
   vendor/waveshare/   Waveshare's MIT ADS1263 driver, one import line patched
 ```
 
