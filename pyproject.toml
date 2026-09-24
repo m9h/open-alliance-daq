@@ -10,12 +10,12 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [{ name = "Morgan Hough" }]
-dependencies = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0"]
+dependencies = []   # acquisition needs only the standard library; see extras
 
 [project.optional-dependencies]
-pi = ["spidev", "gpiod>=2.1"]          # libgpiod backend; RPi.GPIO is picked up automatically if installed
-analysis = ["hplc-py>=0.2", "matplotlib", "jinja2>=3"]
-dev = ["pytest", "hplc-py>=0.2", "matplotlib", "jinja2>=3"]
+pi = ["spidev", "gpiod>=2.1"]          # acquisition box: hardware bindings only
+analysis = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0", "hplc-py>=0.2", "matplotlib", "jinja2>=3"]
+dev = ["pytest", "numpy>=1.26", "scipy>=1.11", "pandas>=2.0", "hplc-py>=0.2", "matplotlib", "jinja2>=3"]
 
 [project.scripts]
 alliance-daq = "alliance_daq.cli:main"

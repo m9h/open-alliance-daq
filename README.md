@@ -18,7 +18,7 @@ Python integrates the peaks.
 
 | Item | Notes |
 |---|---|
-| Raspberry Pi 4 | Fedora (primary; see `deploy/README.md`) or Raspberry Pi OS 64-bit. Not a Pi 5 under Fedora: the mainline RP1 overlay has no SPI yet (docs/plan.md, Compute) |
+| Raspberry Pi 3B+ or 4 | Fedora (primary; see `deploy/README.md`) or Raspberry Pi OS 64-bit. Acquisition is stdlib-only Python, so any 64-bit Pi with the 40-pin header works (3B/3B+/Zero 2 W/4/CM4); Fedora rules out the 32-bit Pi 1/2/Zero. Not a Pi 5 under Fedora yet (docs/plan.md, Compute) |
 | Waveshare High-Precision AD HAT (ADS1263) | 5 differential channels, 32-bit, open schematic |
 | PC817 optocoupler + 1 kΩ + 10 kΩ | isolates the e2695 Inject Start closure from the Pi GPIO |
 | Shielded twisted pair, 22–24 AWG | one pair per analog channel |
@@ -42,7 +42,8 @@ permissions, installs the build deps and the systemd unit). Raspberry Pi OS: `su
 nonint do_spi 0`. Then:
 
 ```bash
-pip install -e '.[pi]'
+pip install -e '.[pi]'          # acquisition box: no numpy/scipy/pandas needed
+pip install -e '.[analysis]'    # analysis box: hplc-py, reports
 alliance-daq live --rate 2                 # check every channel reads what the front panel shows
 alliance-daq record --duration 900 --label std-mix --count 0   # arm; each Inject Start pulse starts a 15 min run
 ```

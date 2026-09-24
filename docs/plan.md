@@ -83,7 +83,13 @@ plain so any future tool can import it.
 
 ## Compute
 
-**Acquisition runs on the Pi 4** (Fedora 44, the same kernel family). Its BCM2835 SPI
+**Acquisition runs on the Pi 4** (Fedora 44, the same kernel family), but almost any Pi would
+do: the acquisition path is standard-library Python plus the `spidev` and `gpiod` bindings, with
+no numpy in the loop, and the work is 20 small SPI transactions per second. The floor is set by
+the OS, not the load: Fedora is aarch64-only, so the oldest usable boards are the Pi 3B/3B+ and
+Zero 2 W (Pi 1, 2 and the original Zero are 32-bit). A 3B+ with wired Ethernet is the sensible
+minimum; the Zero 2 W has no Ethernet and only 512 MB. Under Raspberry Pi OS 32-bit even a
+Pi 1 B+ or Zero could run the logger, at the cost of the Fedora path. Its BCM2835 SPI
 controller is fully supported and its device tree already carries the disabled `spi0` node
 plus `spidev` children, so `dtparam=spi=on` is all it needs. The load is 20 SPI transactions
 per second and a CSV append. **The Pi 5 (16 GB) is the analysis machine**: hplc-py fits,
