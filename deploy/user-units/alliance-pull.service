@@ -1,0 +1,6 @@
+[Unit]
+Description=Pull HPLC run CSVs from the acquisition Pi
+
+[Service]
+Type=oneshot
+ExecStart=%h/open-alliance-daq/deploy/pull-runs.sh

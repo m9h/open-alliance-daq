@@ -52,3 +52,25 @@ right user and paths. It does not enable the unit; do that after `live` shows sa
 GPIO (`/dev/gpiochip4`, set `ALLIANCE_DAQ_GPIOCHIP=/dev/gpiochip4`) but no SPI controller, so
 the ADS1263 HAT cannot be used on a Pi 5 under Fedora until RP1 SPI is upstream. Use a Pi 4 for
 acquisition.
+
+## Split setup: Pi 4 acquires, another machine analyses
+
+The Pi stays a dumb appliance: it records to `~/hplc-runs/` and nothing else. The analysis
+machine (here the DGX Spark) pulls new CSVs with rsync on a one-minute systemd *user* timer,
+so no root is needed on either end. One-time setup on the analysis machine:
+
+```bash
+# let it log in to the Pi non-interactively
+ssh-copy-id mhough@192.168.108.194
+# install and start the timer
+mkdir -p ~/.config/systemd/user
+cp ~/open-alliance-daq/deploy/user-units/alliance-pull.* ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now alliance-pull.timer
+loginctl enable-linger $USER      # keep user timers running when not logged in
+systemctl --user list-timers | grep alliance
+```
+
+Then, on the analysis machine, `alliance-daq quant ~/hplc-runs/<run>.csv` or
+`alliance-daq report ~/hplc-runs/*.csv --out report.pdf` as usual. tectonic installs without
+root via `curl -fsSL https://drop-sh.fullyjustified.net | sh` in `~/.local/bin`.
