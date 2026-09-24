@@ -1,0 +1,47 @@
+% knitr (Sweave-style) report for open-alliance-daq runs using chromatographR.
+% Build:  Rscript -e 'knitr::knit2pdf("report.Rnw")'   (or: knitr::knit("report.Rnw"); tectonic report.tex)
+% Needs:  install.packages(c("knitr", "chromatographR", "xtable"))
+% NOT exercised in this repo's CI (no R here). Treat as a starting point and check the
+% chromatographR API against its vignette: https://ethanbass.github.io/chromatographR/
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{booktabs,graphicx,helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\title{HPLC run report (chromatographR)}
+\begin{document}
+\maketitle
+
+<<setup, include=FALSE>>=
+library(chromatographR)
+library(xtable)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 6.5, fig.height = 2.6)
+csv_path <- Sys.getenv("RUN_CSV", "../runs/demo.csv")   # set RUN_CSV=path/to/run.csv
+channel  <- Sys.getenv("RUN_CHANNEL", "uv1")
+df <- read.csv(csv_path, comment.char = "#")
+# chromatographR expects a list of time x wavelength matrices; we have one "wavelength" (the channel).
+m <- as.matrix(df[, channel, drop = FALSE]); rownames(m) <- df$time_s / 60; colnames(m) <- channel
+chroms <- list(run = m)
+@
+
+\section*{Run \texttt{\Sexpr{basename(csv_path)}}}
+Channel \texttt{\Sexpr{channel}}, \Sexpr{nrow(df)} samples, \Sexpr{round(max(df$time_s), 1)} s.
+
+<<traces, fig.cap="Recorded channels.">>=
+par(mfrow = c(length(setdiff(names(df), "time_s")), 1), mar = c(3, 4, 1.5, 1))
+for (ch in setdiff(names(df), "time_s")) plot(df$time_s / 60, df[[ch]], type = "l", xlab = "time (min)", ylab = ch, main = ch)
+@
+
+<<peaks>>=
+pks <- get_peaks(chroms, lambdas = channel, fit = "egh")   # exponential-Gaussian hybrid fit
+pt  <- get_peaktable(pks, response = "area")
+tab <- pks$run[[channel]]
+@
+
+<<fitplot, fig.cap="Exponential-Gaussian hybrid fit.">>=
+plot(pks, chrom_list = chroms, index = "run", lambda = channel)
+@
+
+<<table, results="asis">>=
+print(xtable(tab, caption = "Peak table (chromatographR, EGH fit)"), booktabs = TRUE, include.rownames = FALSE)
+@
+\end{document}

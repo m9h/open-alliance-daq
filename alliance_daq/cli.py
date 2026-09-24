@@ -130,6 +130,19 @@ def cmd_quant(args) -> int:
     return 0 if len(peaks) else 1
 
 
+def cmd_report(args) -> int:
+    from .report import build_report
+
+    res = build_report(args.csv, args.out, columns=args.column, prominence=args.prominence,
+                       baseline_window_min=args.baseline_window, title=args.title, compile_pdf=not args.no_pdf)
+    print(f"# tex -> {res['tex']}")
+    if res["pdf"]:
+        print(f"# pdf -> {res['pdf']}  ({res['engine']})")
+    elif not args.no_pdf:
+        print("# no LaTeX engine found (tectonic or latexmk); compile the .tex yourself", file=sys.stderr)
+    return 0
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="alliance-daq", description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -168,6 +181,16 @@ def main(argv=None) -> int:
     q.add_argument("--out", help="peak table CSV (default: <run>_<column>_peaks.csv next to the run)")
     q.add_argument("--plot", help="save hplc-py's fit figure to this PNG path")
     q.set_defaults(func=cmd_quant)
+
+    rp = sub.add_parser("report", help="PDF report (traces, hplc-py fits, peak tables) for one or more runs")
+    rp.add_argument("csv", nargs="+", help="run CSV(s); one section per run")
+    rp.add_argument("--column", action="append", help="channel to quantify (repeatable; default: first channel)")
+    rp.add_argument("--out", default="report.pdf", help="output PDF path (default report.pdf; .tex and figures go next to it)")
+    rp.add_argument("--title", default="HPLC run report")
+    rp.add_argument("--prominence", type=float, default=0.01)
+    rp.add_argument("--baseline-window", type=float, default=1.0, help="SNIP window in minutes")
+    rp.add_argument("--no-pdf", action="store_true", help="write .tex and figures only")
+    rp.set_defaults(func=cmd_report)
 
     args = p.parse_args(argv)
     return args.func(args)

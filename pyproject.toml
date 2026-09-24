@@ -14,14 +14,15 @@ dependencies = ["numpy>=1.26", "scipy>=1.11", "pandas>=2.0"]
 
 [project.optional-dependencies]
 pi = ["spidev", "RPi.GPIO", "gpiozero"]
-analysis = ["hplc-py>=0.2", "matplotlib"]
-dev = ["pytest", "hplc-py>=0.2", "matplotlib"]
+analysis = ["hplc-py>=0.2", "matplotlib", "jinja2>=3"]
+dev = ["pytest", "hplc-py>=0.2", "matplotlib", "jinja2>=3"]
 
 [project.scripts]
 alliance-daq = "alliance_daq.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["alliance_daq"]
+include = ["alliance_daq/templates/*.j2"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

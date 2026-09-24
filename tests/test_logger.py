@@ -115,3 +115,24 @@ def test_hplcpy_quant_matches_simulator(tmp_path):
         assert abs(row.rt_s - rt) < 0.5
         true_area = h * s * math.sqrt(2 * math.pi)
         assert abs(row.area - true_area) / true_area < 0.05
+
+
+def test_report_builds_tex_and_pdf(tmp_path):
+    pytest = __import__("pytest")
+    pytest.importorskip("hplc")
+    pytest.importorskip("jinja2")
+    import shutil
+
+    from alliance_daq.report import build_report
+
+    clock = FakeClock()
+    adc = SimulatedAdc(noise_v=20e-6, clock=clock)
+    logger = RunLogger(adc, DEFAULT_MAP, rate_hz=20, out_dir=tmp_path, clock=clock, sleep=clock.sleep)
+    res = logger.run_triggered(ImmediateTrigger(), duration_s=200.0, label="rep")
+    out = build_report([res.path], tmp_path / "report.pdf", columns=["uv1", "uv2"], prominence=0.02)
+    tex = out["tex"].read_text()
+    assert r"\section{Run" in tex and "uv1" in tex and "uv2" in tex
+    assert tex.count(r"\begin{table}") == 2
+    assert (tmp_path / "report_figs").exists()
+    if shutil.which("tectonic") or shutil.which("latexmk"):
+        assert out["pdf"] is not None and out["pdf"].stat().st_size > 10_000

@@ -69,6 +69,14 @@ across many runs, Gaussian / exponential-Gaussian peak fitting, and peak-table c
 Its alignment tools are the better choice once there are dozens of runs to compare. It reads
 this project's CSVs directly.
 
+**Reporting.** `alliance-daq report` renders a LaTeX PDF per run set: acquisition metadata,
+channel map, small-multiple traces, each hplc-py fit with shaded components, and a peak table
+(retention time, amplitude, width, skew, area, area %). Figures are vector PDF and the `.tex`
+is kept, so a report can be hand-edited or rebuilt. It compiles with tectonic (no TeX Live
+needed) or latexmk. For an R workflow, `r/report.Rnw` is a knitr template that does the same
+with chromatographR; it reads the same CSVs. Pweave was considered and rejected: no release
+since 2018 and it no longer imports against current IPython.
+
 No desktop chromatography data system is part of the plan. The CSV format is deliberately
 plain so any future tool can import it.
 

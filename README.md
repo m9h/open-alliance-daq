@@ -31,6 +31,7 @@ uv venv && uv pip install -e '.[dev]'
 uv run alliance-daq record --simulate --trigger now --duration 200 --label demo
 uv run alliance-daq peaks runs/*_demo.csv          # quick look, SciPy only
 uv run alliance-daq quant runs/*_demo.csv --plot fit.png   # hplc-py skew-normal fit + peak table
+uv run alliance-daq report runs/*_demo.csv --out demo.pdf   # LaTeX PDF: traces, fits, peak tables
 uv run pytest
 ```
 
@@ -48,7 +49,9 @@ To run the logger as a service that re-arms after every injection, see `deploy/R
 Edit `config/channels.example.toml` to match your detector output scaling and pass it
 with `--channels`. Each run lands in `runs/` as a CSV with metadata comment lines;
 `pandas.read_csv(path, comment="#")` reads it. `alliance-daq quant` fits and quantifies the peaks with
-hplc-py; `alliance-daq peaks` is the dependency-free quick look.
+hplc-py, `alliance-daq report` turns one or more runs into a PDF, and `alliance-daq peaks` is
+the dependency-free quick look. An R alternative using chromatographR and knitr is in
+`r/` (untested here; needs R).
 
 ## Layout
 
@@ -60,7 +63,9 @@ alliance_daq/
   logger.py      fixed-rate acquisition loop -> CSV with metadata header
   analysis.py    quick-look: ALS baseline, peak finding, trapezoid integration
   quant.py       method-grade: hplc-py skew-normal peak fitting and quantification
-  cli.py         alliance-daq record | live | peaks | quant
+  report.py      PDF report: matplotlib figures + Jinja2 LaTeX template, compiled with tectonic
+  cli.py         alliance-daq record | live | peaks | quant | report
+  templates/     report.tex.j2
   vendor/waveshare/   Waveshare's MIT ADS1263 driver, one import line patched
 ```
 
