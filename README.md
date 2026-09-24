@@ -2,7 +2,7 @@
 
 Open-source data acquisition for a Waters Alliance HPLC stack: **e2695 Separations Module,
 2489 UV/Vis detector, 2424 Evaporative Light Scattering detector**, plus a second optical
-detector. No Empower, no Waters drivers. A Raspberry Pi 4 with a 32-bit ADC HAT records
+detector. A Raspberry Pi 4 with a 32-bit ADC HAT records
 the detectors' analog outputs, the e2695's Inject Start pulse provides hardware t0, and
 Python integrates the peaks.
 
