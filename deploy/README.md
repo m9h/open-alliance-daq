@@ -27,6 +27,25 @@ whole sample set records unattended. Stop it with `sudo systemctl stop alliance-
 The `pi` user needs to be in the `gpio` and `spi` groups (default on Pi OS). If the unit
 fails with "ID Read failed", SPI is not enabled or the HAT is not seated.
 
+## Raspberry Pi OS quick path (any 64-bit Pi, e.g. a 3A+/3B+)
+
+Use Raspberry Pi OS Lite 64-bit. The distro already ships `python3-spidev` and `RPi.GPIO`, so
+build the venv on top of the system packages and nothing needs compiling:
+
+```bash
+sudo raspi-config nonint do_spi 0
+sudo apt install -y git python3-venv python3-spidev python3-rpi.gpio
+git clone https://github.com/m9h/open-alliance-daq ~/open-alliance-daq
+cd ~/open-alliance-daq
+python3 -m venv --system-site-packages .venv && .venv/bin/pip install -e .
+.venv/bin/alliance-daq live --rate 2
+sudo nmcli radio wifi off        # if on wired Ethernet (USB adapter on a 3A+)
+```
+
+The GPIO layer picks `RPi.GPIO` automatically when it imports; libgpiod is only needed where it
+does not (Fedora, Pi 5). For the systemd unit, edit `User=` and the paths in
+`deploy/alliance-daq.service` (or use `deploy/fedora-setup.sh`'s `sed` lines as a template).
+
 ## Fedora on the Pi (instead of Raspberry Pi OS)
 
 Fedora boots the Pi 4 through UEFI/grub and ships with the SPI device-tree node disabled,
